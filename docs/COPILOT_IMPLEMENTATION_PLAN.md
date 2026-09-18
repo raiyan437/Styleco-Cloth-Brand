@@ -3,6 +3,8 @@
 ## Campaign banner sale CTA — complete (2026-09-18)
 
 - [x] Rename the homepage campaign banner heading to Explore Current Sale.
+- [x] Replace the banner artwork with a high-resolution local sale editorial
+      asset that preserves the neutral Styleco palette.
 - [x] Route its existing Explore Now CTA to `/sale`.
 - [x] Add a browser assertion for the heading and destination.
 

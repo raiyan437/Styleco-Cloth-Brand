@@ -298,8 +298,8 @@ export const homepageContent: HomepageContent = {
     title: "Good clothes.\nGreat days.",
     description:
       "Fresh silhouettes. Feel-good fabrics. A little more you, every single day.",
-    image: "/images/hero.webp",
-    alt: "Orange overshirt and cream trousers in the Styleco everyday editorial",
+    image: "/images/current-sale-banner.png",
+    alt: "Styleco sale editorial with a rust overshirt, tailored trousers and a clothing rack",
     href: "/new-arrivals",
     cta: "Meet your new favorites",
   },

@@ -2,9 +2,9 @@
 
 ## Campaign banner sale CTA — 2026-09-18
 
-The homepage campaign banner now reads “Explore Current Sale”. Its Explore Now
-link routes directly to `/sale`; campaign imagery and supporting copy are
-unchanged.
+The homepage campaign banner now reads “Explore Current Sale” and uses the
+high-resolution local `current-sale-banner.png` editorial asset. Its Explore
+Now link routes directly to `/sale`; supporting copy is unchanged.
 
 ## Category listing density — 2026-09-18
 

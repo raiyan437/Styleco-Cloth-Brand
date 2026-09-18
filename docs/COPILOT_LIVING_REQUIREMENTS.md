@@ -4,7 +4,8 @@
 
 The homepage campaign banner is titled “Explore Current Sale”. Its existing
 Explore Now CTA routes to `/sale`, so the campaign entry point opens the sale
-listing directly. The supporting copy and campaign imagery remain unchanged.
+listing directly. The banner uses a high-resolution local editorial sale asset
+with a neutral Styleco-compatible palette and no embedded text.
 
 ## Category listing density — 2026-09-18
 

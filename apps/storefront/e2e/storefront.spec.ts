@@ -66,6 +66,10 @@ for (const viewport of [
     await expect(
       page.getByRole("heading", { name: "Explore Current Sale" }),
     ).toBeVisible();
+    await expect(page.locator(".luxury-banner img")).toHaveAttribute(
+      "src",
+      /current-sale-banner/,
+    );
     await expect(
       page.locator(".luxury-banner").getByRole("link", {
         name: "Explore Now",
