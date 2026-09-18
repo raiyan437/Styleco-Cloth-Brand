@@ -78,12 +78,12 @@ export default async function HomePage() {
         />
         <div className="photo-copy">
           <h2>
-            Experience
+            Explore Current
             <br />
-            everyday fashion
+            Sale
           </h2>
           <p>Discover a wardrobe made for you</p>
-          <Link href="/new-arrivals" className="button">
+          <Link href="/sale" className="button">
             Explore Now
           </Link>
         </div>

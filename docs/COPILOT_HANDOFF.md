@@ -1,5 +1,11 @@
 # Handoff — complete frontend demo
 
+## Campaign banner sale CTA — 2026-09-18
+
+The homepage campaign banner now reads “Explore Current Sale”. Its Explore Now
+link routes directly to `/sale`; campaign imagery and supporting copy are
+unchanged.
+
 ## Category listing density — 2026-09-18
 
 Category pages now show four product cards per row on desktop. Tablet and

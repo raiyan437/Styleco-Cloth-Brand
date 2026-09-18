@@ -1,5 +1,12 @@
 # Architecture and decisions
 
+## ADR-022 — homepage campaign sale destination — 2026-09-18
+
+The homepage campaign banner owns the presentation copy “Explore Current Sale”
+and points its existing Explore Now link to the `/sale` route. This is a
+composition-only change; product data, services, repositories and routing
+contracts remain unchanged.
+
 ## ADR-021 — responsive category grid density — 2026-09-18
 
 The shared category/listing product grid uses four equal columns at desktop

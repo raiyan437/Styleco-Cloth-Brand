@@ -1,5 +1,11 @@
 # Living requirements
 
+## Campaign banner sale CTA — 2026-09-18
+
+The homepage campaign banner is titled “Explore Current Sale”. Its existing
+Explore Now CTA routes to `/sale`, so the campaign entry point opens the sale
+listing directly. The supporting copy and campaign imagery remain unchanged.
+
 ## Category listing density — 2026-09-18
 
 Desktop category listings show four product cards per row so the catalog is

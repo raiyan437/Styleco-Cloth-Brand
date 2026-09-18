@@ -1,5 +1,11 @@
 # Implementation plan
 
+## Campaign banner sale CTA — complete (2026-09-18)
+
+- [x] Rename the homepage campaign banner heading to Explore Current Sale.
+- [x] Route its existing Explore Now CTA to `/sale`.
+- [x] Add a browser assertion for the heading and destination.
+
 ## Category listing density — complete (2026-09-18)
 
 - [x] Show four products per row in desktop category listings.

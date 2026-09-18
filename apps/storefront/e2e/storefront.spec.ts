@@ -64,6 +64,15 @@ for (const viewport of [
       page.getByRole("heading", { name: /^Latest Products\.$/ }),
     ).toBeVisible();
     await expect(
+      page.getByRole("heading", { name: "Explore Current Sale" }),
+    ).toBeVisible();
+    await expect(
+      page.locator(".luxury-banner").getByRole("link", {
+        name: "Explore Now",
+        exact: true,
+      }),
+    ).toHaveAttribute("href", "/sale");
+    await expect(
       page.getByRole("button", {
         name: "Save Relaxed Oxford Shirt to wishlist",
       }),
