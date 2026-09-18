@@ -303,7 +303,7 @@ export const homepageContent: HomepageContent = {
     title: "Good clothes.\nGreat days.",
     description:
       "Fresh silhouettes. Feel-good fabrics. A little more you, every single day.",
-    image: "/images/current-sale-banner.png",
+    image: localAssetPath("/images/current-sale-banner.png"),
     alt: "Styleco sale editorial with a rust overshirt, tailored trousers and a clothing rack",
     href: "/new-arrivals",
     cta: "Meet your new favorites",
@@ -314,7 +314,7 @@ export const homepageContent: HomepageContent = {
       title: "A familiar feeling.\nA fresh perspective.",
       description:
         "Meet the modern Katua. Easy, considered, and unmistakably you.",
-      image: "/images/katua.webp",
+      image: localAssetPath("/images/katua.webp"),
       alt: "Ivory cotton Katua in warm natural light",
       href: "/category/katua",
       cta: "Explore the Katua edit",
@@ -324,7 +324,7 @@ export const homepageContent: HomepageContent = {
       title: "Take it\neasy.",
       description:
         "Soft landings for slow mornings. Your new favorite way to do nothing.",
-      image: "/images/sleepwear.webp",
+      image: localAssetPath("/images/sleepwear.webp"),
       alt: "Sky blue cotton sleep set for slow mornings",
       href: "/category/sleepwear",
       cta: "Find your comfort zone",
