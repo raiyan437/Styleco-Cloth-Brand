@@ -1,0 +1,160 @@
+@import "@fontsource-variable/archivo";
+@import "@fontsource-variable/dm-sans";
+@import "tailwindcss";
+@import "./storefront.css";
+
+:root {
+  --background: #ffffff;
+  --foreground: #111111;
+  --surface: #ffffff;
+  --surface-muted: #f1efea;
+  --text-muted: #625f59;
+  --border: #d8d4cc;
+  --primary: #111111;
+  --primary-foreground: #ffffff;
+  --accent-orange: #ff5a1f;
+  --accent-blue: #2457f5;
+  --accent-lime: #d7f542;
+  --destructive: #b42318;
+  --success: #157347;
+  --focus-ring: #2457f5;
+  --content-max: 105rem;
+  --page-gutter: 1.25rem;
+  --section-space: var(--space-section);
+  --styleco-shadow-overlay: 0 0.75rem 2rem rgb(17 17 17 / 12%);
+  --styleco-radius-card: 0.625rem;
+  --type-label: 0.6875rem;
+  --type-caption: 0.75rem;
+  --type-small: 0.875rem;
+  --type-product: 0.9375rem;
+  --type-body: 1rem;
+  --type-section: clamp(1.75rem, 1.3rem + 1.5vw, 2.75rem);
+  --type-page: clamp(2.25rem, 1.5rem + 2.5vw, 3.75rem);
+  --space-section: clamp(3rem, 5vw, 5rem);
+  --motion-fast: 160ms;
+  --motion-normal: 280ms;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-text-muted: var(--text-muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent-orange: var(--accent-orange);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-lime: var(--accent-lime);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --font-sans: "DM Sans Variable", Arial, Helvetica, sans-serif;
+  --font-display: "Archivo Variable", Arial, Helvetica, sans-serif;
+  --radius-control: 0.25rem;
+  --radius-card: var(--styleco-radius-card);
+  --shadow-overlay: var(--styleco-shadow-overlay);
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "DM Sans Variable", Arial, Helvetica, sans-serif;
+  font-size: var(--type-body);
+  line-height: 1.6;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 4px;
+}
+
+::selection {
+  background: var(--accent-lime);
+  color: var(--foreground);
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --page-gutter: 2rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --page-gutter: 3rem;
+  }
+}
+
+@media (min-width: 120rem) {
+  :root {
+    --page-gutter: 4rem;
+  }
+}
+
+@layer utilities {
+  .site-container {
+    width: min(calc(100% - (var(--page-gutter) * 2)), var(--content-max));
+    margin-inline: auto;
+  }
+
+  .section-space {
+    padding-block: var(--section-space);
+  }
+
+  .text-display-xl {
+    font-family: "Archivo Variable", Arial, Helvetica, sans-serif;
+    font-size: clamp(3.5rem, 9vw, 8.5rem);
+    font-weight: 750;
+    line-height: 0.9;
+    letter-spacing: -0.055em;
+  }
+
+  .text-display-lg {
+    font-family: "Archivo Variable", Arial, Helvetica, sans-serif;
+    font-size: clamp(2.5rem, 5vw, 5.5rem);
+    font-weight: 720;
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+  }
+
+  .text-heading-section {
+    font-family: "Archivo Variable", Arial, Helvetica, sans-serif;
+    font-size: var(--type-section);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+  }
+
+  .text-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+.env*
+!.env.example
+*.log
+test-results/
+apps/storefront/test-results*/
+apps/storefront/tmp-*.webp
+test-results-touch/
+playwright-report/
+.DS_Store

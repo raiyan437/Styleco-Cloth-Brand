@@ -1,0 +1,22 @@
+{
+  "name": "styleco",
+  "private": true,
+  "packageManager": "pnpm@11.19.0",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @styleco/storefront dev",
+    "build": "pnpm --filter @styleco/storefront build",
+    "start": "pnpm --filter @styleco/storefront start",
+    "lint": "pnpm --filter @styleco/storefront lint",
+    "typecheck": "pnpm --filter @styleco/storefront typecheck",
+    "test": "pnpm --filter @styleco/storefront test",
+    "test:e2e": "pnpm --filter @styleco/storefront test:e2e",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}
