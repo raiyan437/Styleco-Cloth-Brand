@@ -1,15 +1,9 @@
+import { Suspense } from "react";
 import { getServices } from "@/services/container";
-import { ProductListing } from "@/components/catalog/product-listing";
+import { SearchProductListing } from "@/components/catalog/search-product-listing";
 export const metadata = { title: "Search" };
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<{ q?: string }>;
-}) {
-  const [products, params] = await Promise.all([
-    getServices().catalog.getProducts(),
-    searchParams,
-  ]);
+export default async function Page() {
+  const products = await getServices().catalog.getProducts();
   return (
     <main id="main-content" className="site-container page-space">
       <header className="listing-heading">
@@ -20,11 +14,9 @@ export default async function Page({
           </h1>
         </div>
       </header>
-      <ProductListing
-        products={products}
-        search
-        initialQuery={typeof params.q === "string" ? params.q : ""}
-      />
+      <Suspense fallback={<div className="state-loading">Loading search…</div>}>
+        <SearchProductListing products={products} />
+      </Suspense>
     </main>
   );
 }

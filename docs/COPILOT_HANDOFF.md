@@ -1,5 +1,13 @@
 # Handoff — complete frontend demo
 
+## GitHub Pages demo deployment — 2026-09-18
+
+The repository now includes a GitHub Actions Pages workflow. A push to `main`
+builds the storefront as a static export with the `/Styleco-Cloth-Brand/` base
+path and deploys `apps/storefront/out` to:
+<https://raiyan437.github.io/Styleco-Cloth-Brand/>.
+Local development remains unchanged; no backend or external service is needed.
+
 ## Campaign banner sale CTA — 2026-09-18
 
 The homepage campaign banner now reads “Explore Current Sale” and uses the

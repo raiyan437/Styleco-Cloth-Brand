@@ -44,6 +44,20 @@ pnpm start
 
 Stop either server with `Ctrl+C`.
 
+## GitHub Pages demo
+
+The `main` branch deploys automatically through `.github/workflows/deploy-pages.yml`.
+The workflow builds a static export with the repository path baked into links and
+assets, then publishes it to GitHub Pages. After the first successful workflow
+run, open:
+
+<https://raiyan437.github.io/Styleco-Cloth-Brand/>
+
+To trigger a deployment without a code change, open the repository's Actions tab,
+select **Deploy Styleco to GitHub Pages**, and choose **Run workflow**. The
+repository Pages source must be set to **GitHub Actions**; the workflow has the
+required Pages and OIDC permissions.
+
 ## Start work safely
 
 From the repository root, inspect the checkout and remote:

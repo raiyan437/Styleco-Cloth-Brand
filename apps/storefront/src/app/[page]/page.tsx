@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ContactForm } from "@/components/info/demo-forms";
 import { SizeTable } from "@/components/catalog/size-guide";
 import { Breadcrumb } from "@/components/ui/shared";
+import { localAssetPath } from "@/config/site";
 const content: Record<
   string,
   {
@@ -132,6 +133,13 @@ const content: Record<
     ],
   },
 };
+
+export function generateStaticParams() {
+  return Object.keys(content).map((page) => ({ page }));
+}
+
+export const dynamicParams = false;
+
 export async function generateMetadata({
   params,
 }: {
@@ -165,7 +173,7 @@ export default async function Page({
       {page === "about" && (
         <div className="about-image">
           <Image
-            src="/images/hero.webp"
+            src={localAssetPath("/images/hero.webp")}
             alt="Styleco orange overshirt editorial"
             fill
             sizes="100vw"

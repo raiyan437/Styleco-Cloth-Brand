@@ -1,5 +1,13 @@
 # Living requirements
 
+## GitHub Pages demo deployment — 2026-09-18
+
+The storefront must be publishable as a static Next.js export from the `main`
+branch to GitHub Pages at `/Styleco-Cloth-Brand/`. The export uses repository
+path-aware links and local image URLs, generates all mock catalog and info
+routes at build time, keeps search filtering client-side, and requires no
+backend or external service.
+
 ## Campaign banner sale CTA — 2026-09-18
 
 The homepage campaign banner is titled “Explore Current Sale”. Its existing

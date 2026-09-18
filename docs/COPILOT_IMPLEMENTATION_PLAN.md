@@ -1,5 +1,13 @@
 # Implementation plan
 
+## GitHub Pages demo deployment — complete (2026-09-18)
+
+- [x] Configure an Actions-only Next.js static export for the repository path.
+- [x] Generate all category, product and info dynamic routes at build time.
+- [x] Keep search query filtering interactive on the exported `/search/` page.
+- [x] Add the Pages artifact/deployment workflow and document the demo URL.
+- [x] Verify the GitHub checkout installs from the frozen lockfile and builds.
+
 ## Campaign banner sale CTA — complete (2026-09-18)
 
 - [x] Rename the homepage campaign banner heading to Explore Current Sale.

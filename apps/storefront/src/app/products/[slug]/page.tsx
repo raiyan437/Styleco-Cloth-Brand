@@ -6,6 +6,14 @@ import { ProductCard } from "@/components/catalog/product-card";
 import { HorizontalCarousel } from "@/components/catalog/horizontal-carousel";
 import { Breadcrumb } from "@/components/ui/shared";
 import { Star } from "lucide-react";
+
+export async function generateStaticParams() {
+  const products = await getServices().catalog.getProducts();
+  return products.map((product) => ({ slug: product.slug }));
+}
+
+export const dynamicParams = false;
+
 export async function generateMetadata({
   params,
 }: {

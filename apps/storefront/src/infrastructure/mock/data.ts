@@ -1,5 +1,6 @@
 import type { Category, Product } from "../../domain/catalog";
 import type { HomepageContent, HomepageSection } from "../../domain/homepage";
+import { localAssetPath } from "../../config/site";
 
 // Seed fixtures only: UI must obtain categories through CatalogService.
 export const categories: Category[] = [
@@ -130,12 +131,14 @@ const catalogGroups = [
 ];
 
 const productImagePath = (imageKey: string, colorName: string) =>
-  `/images/products/${imageKey === "tee" ? "t-shirt" : imageKey}-${colorName.toLowerCase().replaceAll(" ", "-")}.webp`;
+  localAssetPath(
+    `/images/products/${imageKey === "tee" ? "t-shirt" : imageKey}-${colorName.toLowerCase().replaceAll(" ", "-")}.webp`,
+  );
 
 for (const category of categories) {
   category.image = {
     id: category.id,
-    url: `/images/categories/${category.slug}/category.webp`,
+    url: localAssetPath(`/images/categories/${category.slug}/category.webp`),
     alt: `${category.name} editorial collection`,
     width: 1120,
     height: 1400,
@@ -153,7 +156,9 @@ export const products: Product[] = catalogGroups.flatMap((group, groupIndex) =>
         const imagePath =
           index === 0
             ? productImagePath(group.image, color.name)
-            : `/images/products/${slug}/${color.name.toLowerCase().replaceAll(" ", "-")}.webp`;
+            : localAssetPath(
+                `/images/products/${slug}/${color.name.toLowerCase().replaceAll(" ", "-")}.webp`,
+              );
         return [
           color.name,
           [

@@ -4,6 +4,7 @@ import { getServices } from "@/services/container";
 import { ProductCard } from "@/components/catalog/product-card";
 import { HorizontalCarousel } from "@/components/catalog/horizontal-carousel";
 import { isSale } from "@/services/catalog-query";
+import { localAssetPath } from "@/config/site";
 
 export default async function HomePage() {
   const { catalog, homepage } = getServices();
@@ -111,7 +112,7 @@ export default async function HomePage() {
         <div className="seasonal-grid">
           <Link href="/sale" className="seasonal-large">
             <Image
-              src="/images/shirt.webp"
+              src={localAssetPath("/images/shirt.webp")}
               alt="Relaxed shirt from the seasonal edit"
               fill
               sizes="(max-width: 600px) 100vw, 50vw"
@@ -156,7 +157,7 @@ export default async function HomePage() {
         <div className="brand-story">
           <div className="brand-photo">
             <Image
-              src="/images/katua.webp"
+              src={localAssetPath("/images/katua.webp")}
               alt="Styleco cotton Katua, designed for everyday comfort"
               fill
               sizes="(max-width: 600px) 100vw, 55vw"

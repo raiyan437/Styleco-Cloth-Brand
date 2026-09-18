@@ -3,6 +3,14 @@ import type { Metadata } from "next";
 import { getServices } from "@/services/container";
 import { ProductListing } from "@/components/catalog/product-listing";
 import { Breadcrumb } from "@/components/ui/shared";
+
+export async function generateStaticParams() {
+  const categories = await getServices().catalog.getCategories();
+  return categories.map((category) => ({ slug: category.slug }));
+}
+
+export const dynamicParams = false;
+
 export async function generateMetadata({
   params,
 }: {

@@ -1,5 +1,16 @@
 # Architecture and decisions
 
+## ADR-023 — GitHub Pages static export — 2026-09-18
+
+The mock storefront is exported with Next.js `output: "export"` only in the
+GitHub Actions Pages build. The repository name supplies the `basePath`, local
+public image URLs receive the same prefix, and `next/image` runs unoptimized so
+the static artifact needs no image server. Category, product and info dynamic
+routes provide `generateStaticParams`; search reads its query in the client so
+the static `/search/` page remains interactive. A Pages workflow builds
+`apps/storefront/out` and deploys it with the official Pages artifact/actions.
+Local development keeps the normal server-rendered Next.js configuration.
+
 ## ADR-022 — homepage campaign sale destination — 2026-09-18
 
 The homepage campaign banner owns the presentation copy “Explore Current Sale”,

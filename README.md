@@ -29,6 +29,16 @@ pnpm start
 `pnpm start` serves a prior production build. Stop either server with Ctrl+C.
 The package manager and lockfile pin the dependency resolution.
 
+## GitHub Pages demo
+
+Pushes to `main` build and deploy the static storefront through GitHub Actions:
+
+<https://raiyan437.github.io/Styleco-Cloth-Brand/>
+
+The first deployment may take a few minutes after the workflow is enabled. The
+workflow uses the repository path as the Next.js base path, so the same source
+also remains runnable locally at `http://localhost:3000`.
+
 Browser tests use a local Google Chrome installation and start/reuse port 3000.
 Screenshots and failure traces are written to `apps/storefront/test-results/`.
 
