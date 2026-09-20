@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
   },
   images: {
     unoptimized: isGitHubPagesBuild,
-    qualities: [75, 95],
+    qualities: [75, 80, 85, 88, 90, 95],
   },
 };
 export default nextConfig;

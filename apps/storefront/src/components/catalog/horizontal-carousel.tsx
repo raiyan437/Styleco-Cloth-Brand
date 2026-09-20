@@ -24,6 +24,7 @@ export function HorizontalCarousel({
   twoRows = false,
   infiniteFeatured = false,
   className = "",
+  headerAction,
 }: {
   title: string;
   eyebrow?: string;
@@ -32,10 +33,12 @@ export function HorizontalCarousel({
   twoRows?: boolean;
   infiniteFeatured?: boolean;
   className?: string;
+  headerAction?: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const id = useId();
   const [ends, setEnds] = useState({ start: true, end: false });
+  const [position, setPosition] = useState({ current: 0, total: 1 });
   const [activeIndex, setActiveIndex] = useState(0);
   const [categoryTransition, setCategoryTransition] = useState<{
     direction: -1 | 1;
@@ -52,11 +55,22 @@ export function HorizontalCarousel({
     const track = ref.current;
     if (!track) return;
     if (infiniteFeatured) return;
-    const update = () =>
+    const update = () => {
+      const step = Math.max(1, track.clientWidth * 0.85);
+      const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+      const total = Math.max(1, Math.ceil(maxScroll / step) + 1);
       setEnds({
         start: track.scrollLeft < 3,
-        end: track.scrollLeft + track.clientWidth >= track.scrollWidth - 3,
+        end: track.scrollLeft >= maxScroll - 3,
       });
+      setPosition({
+        current: Math.min(
+          total - 1,
+          Math.max(0, Math.round(track.scrollLeft / step)),
+        ),
+        total,
+      });
+    };
     update();
     track.addEventListener("scroll", update, { passive: true });
     const observer = new ResizeObserver(update);
@@ -303,10 +317,15 @@ export function HorizontalCarousel({
     });
   }
 
+  const carouselPosition = infiniteFeatured
+    ? { current: safeActiveIndex, total: Math.max(1, items.length) }
+    : position;
+
   return (
     <section
       className={`carousel-section site-container ${className}`.trim()}
       aria-label={title}
+      aria-roledescription="carousel"
     >
       <div className="section-heading">
         <div>
@@ -316,29 +335,38 @@ export function HorizontalCarousel({
             <span className="orange-period">.</span>
           </h2>
         </div>
-        <div className="carousel-controls">
-          <button
-            className="icon-button circle-outline"
-            aria-label={`Previous ${title}`}
-            aria-controls={id}
-            disabled={
-              categoryTransition !== null || (!infiniteFeatured && ends.start)
-            }
-            onClick={() => scroll(-1)}
-          >
-            <ArrowLeft size={20} />
-          </button>
-          <button
-            className="icon-button circle-outline"
-            aria-label={`Next ${title}`}
-            aria-controls={id}
-            disabled={
-              categoryTransition !== null || (!infiniteFeatured && ends.end)
-            }
-            onClick={() => scroll(1)}
-          >
-            <ArrowRight size={20} />
-          </button>
+        <div className="carousel-heading-actions">
+          {headerAction}
+          <div className="carousel-controls">
+            <button
+              type="button"
+              className="icon-button circle-outline"
+              aria-label={`Previous ${title}`}
+              aria-controls={id}
+              disabled={
+                categoryTransition !== null || (!infiniteFeatured && ends.start)
+              }
+              onClick={() => scroll(-1)}
+            >
+              <ArrowLeft size={20} />
+            </button>
+            <button
+              type="button"
+              className="icon-button circle-outline"
+              aria-label={`Next ${title}`}
+              aria-controls={id}
+              disabled={
+                categoryTransition !== null || (!infiniteFeatured && ends.end)
+              }
+              onClick={() => scroll(1)}
+            >
+              <ArrowRight size={20} />
+            </button>
+            <span className="carousel-position" aria-live="polite">
+              <span className="sr-only">Position </span>
+              {carouselPosition.current + 1} / {carouselPosition.total}
+            </span>
+          </div>
         </div>
       </div>
       <div
@@ -346,7 +374,10 @@ export function HorizontalCarousel({
         ref={ref}
         className={`carousel-track ${kind === "category" ? "category-track" : "product-track"} ${twoRows ? "product-track-two-rows" : ""}`}
         tabIndex={0}
+        role="region"
+        aria-roledescription="carousel"
         aria-label={`${title} scrollable collection`}
+        aria-keyshortcuts="ArrowLeft ArrowRight"
         onKeyDown={(event) => {
           if (
             event.target === event.currentTarget &&

@@ -54,6 +54,16 @@ Bag and wishlist persist in this browser; the latest confirmation lasts for the
 tab session. Login/register, contact, shipping promises, reviews and
 legal copy are explicit demo surfaces. No account, email or real order is created.
 
+## Admin studio demo
+
+Open `http://localhost:3000/admin/login` directly; the storefront intentionally
+does not expose an Admin link. Use username `admin` and password `admin`.
+Admin edits, crop settings and activity are persisted in this browser only and
+do not rewrite source fixtures or publish storefront changes. This credential
+is a frontend demo convenience, not production authentication. Production
+Admin will use server-managed Appwrite Auth after the same app moves to
+server-capable Appwrite Sites.
+
 The 25 products use six original generated local photographs, with category-level
 image reuse, detail crops and illustrative color derivatives. See
 [asset credits](apps/storefront/public/images/ASSET_CREDITS.md).
@@ -62,8 +72,8 @@ image reuse, detail crops and illustrative color derivatives. See
 
 ```text
 apps/storefront/
-  src/app/                 Storefront routes, tokens and responsive styles
-  src/components/          Navigation, catalog, shopping and information UI
+  src/app/                 Storefront and /admin routes, tokens and styles
+  src/components/          Navigation, catalog, shopping, Admin and info UI
   src/domain/              Backend-independent types
   src/repositories/        Data contracts
   src/services/            Application logic and server composition
@@ -74,7 +84,7 @@ apps/storefront/
 docs/                      AIDOS requirements, decisions, plan, handoff
 ```
 
-Workspace globs support `packages/*` and future applications. No shared package
-or Admin application is needed yet. Start with [the handoff](docs/COPILOT_HANDOFF.md).
+Workspace globs support `packages/*`; Storefront and Admin intentionally share
+one Next.js application. Start with [the handoff](docs/COPILOT_HANDOFF.md).
 For cloning, branching, validation, pushing and local Git recovery, see
 [git.md](git.md).

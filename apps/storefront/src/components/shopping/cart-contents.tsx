@@ -12,7 +12,7 @@ import {
   stockFor,
   validateCoupon,
 } from "@/services/mock-commerce";
-import { money } from "@/services/catalog-query";
+import { imageForVariant, money } from "@/services/catalog-query";
 import { EmptyState, Price } from "../ui/shared";
 export function CartContents({
   compact = false,
@@ -51,14 +51,17 @@ export function CartContents({
           const variant = product.variants.find(
             (v) => v.id === item.variantId,
           )!;
+          const image = imageForVariant(product, variant);
           return (
             <article className="cart-item" key={item.variantId}>
               <Link href={`/products/${product.slug}`} onClick={onNavigate}>
                 <Image
-                  src={product.images[0]!.url}
-                  alt={product.name}
+                  src={image!.url}
+                  alt={image!.alt}
                   width={128}
                   height={160}
+                  quality={80}
+                  sizes="112px"
                 />
               </Link>
               <div className="cart-item-info">
@@ -180,7 +183,7 @@ export function CartContents({
               event.preventDefault();
               if (validateCoupon(code)) {
                 updateShopping((s) => ({ ...s, coupon: "STYLE10" }));
-                setMessage("STYLE10 applied. Enjoy 10% off your demo order.");
+                setMessage("STYLE10 applied. Enjoy 10% off your order.");
               } else setMessage("That code isn't in this edit. Try STYLE10.");
             }}
           >
@@ -188,14 +191,14 @@ export function CartContents({
             <div>
               <input
                 id="coupon"
-                placeholder="Demo code: STYLE10"
+                placeholder="Enter code: STYLE10"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
               />
               <button type="submit">Apply</button>
             </div>
             <small role="status">
-              {message || "Frontend demo coupon. No real promotion is applied."}
+              {message || "Enter a valid promotion code to save on your order."}
             </small>
           </form>
         )}
@@ -208,7 +211,7 @@ export function CartContents({
           <ArrowUpRight size={19} />
         </Link>
         <p className="summary-note">
-          Local demo · No real payment or order fulfillment.
+          Your order is only a few good clicks away.
         </p>
       </aside>
     </div>

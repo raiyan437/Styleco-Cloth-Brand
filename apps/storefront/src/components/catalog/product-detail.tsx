@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Star,
   Truck,
@@ -9,16 +9,56 @@ import {
   Minus,
   Plus,
   ArrowUpRight,
+  ArrowLeft,
+  ArrowRight,
+  ShieldCheck,
+  ZoomIn,
 } from "lucide-react";
 import type { Product } from "@/domain/catalog";
 import { colorsOf, displayVariant } from "@/services/catalog-query";
 import { useCommerce } from "../commerce-provider";
 import { useShopping } from "@/services/shopping-store";
 import { Price } from "../ui/shared";
+import { Dialog } from "../ui/dialog";
 import { WishlistButton } from "./product-card";
 import { SizeGuide } from "./size-guide";
+import { useStorefrontCatalog } from "../storefront-catalog-provider";
 
-export function ProductDetail({ product }: { product: Product }) {
+export function ProductDetail({
+  product: initialProduct,
+}: {
+  product: Product;
+}) {
+  const { productById } = useStorefrontCatalog();
+  const product = productById(initialProduct.id) ?? initialProduct;
+  useEffect(() => {
+    const previousTitle = document.title;
+    document.title = product.seoTitle || product.name;
+    let description = document.querySelector<HTMLMetaElement>(
+      'meta[name="description"]',
+    );
+    const previousDescription = description?.content;
+    const createdDescription = !description;
+    if (!description) {
+      description = document.createElement("meta");
+      description.name = "description";
+      document.head.append(description);
+    }
+    description.content = product.seoDescription || product.description || "";
+    return () => {
+      document.title = previousTitle;
+      if (description && createdDescription) {
+        description.remove();
+      } else if (description && previousDescription !== undefined) {
+        description.content = previousDescription;
+      }
+    };
+  }, [
+    product.description,
+    product.name,
+    product.seoDescription,
+    product.seoTitle,
+  ]);
   const colors = colorsOf(product);
   const first = displayVariant(product)!;
   const [color, setColor] = useState(
@@ -28,8 +68,9 @@ export function ProductDetail({ product }: { product: Product }) {
   const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState(0);
   const [guide, setGuide] = useState(false);
+  const [zoomOpen, setZoomOpen] = useState(false);
   const [feedback, setFeedback] = useState("");
-  const { addToBag } = useCommerce();
+  const { addToBag, openCart } = useCommerce();
   const { state, ready } = useShopping();
   const variant = product.variants.find(
     (v) => v.color?.name === color && v.size === size,
@@ -46,22 +87,34 @@ export function ProductDetail({ product }: { product: Product }) {
     <div className="pdp-layout">
       <div className="gallery">
         <div className="gallery-main">
-          <Image
-            key={currentImage.id}
-            className="gallery-image"
-            src={currentImage.url}
-            alt={currentImage.alt}
-            fill
-            quality={95}
-            priority
-            sizes="(max-width:767px) 100vw, 55vw"
-          />
+          <button
+            type="button"
+            className="gallery-image-button"
+            onClick={() => setZoomOpen(true)}
+            aria-label={`Zoom image ${image + 1} of ${images.length}`}
+          >
+            <Image
+              key={currentImage.id}
+              className="gallery-image"
+              src={currentImage.url}
+              alt={currentImage.alt}
+              fill
+              quality={90}
+              priority
+              sizes="(max-width:767px) 100vw, 55vw"
+            />
+            <span className="gallery-zoom-hint" aria-hidden="true">
+              <ZoomIn size={17} />
+              View larger
+            </span>
+          </button>
           <span className="gallery-counter">
             {String(image + 1).padStart(2, "0")} /{" "}
             {String(images.length).padStart(2, "0")}
           </span>
           {images.length > 1 && (
             <button
+              type="button"
               className="gallery-next icon-button"
               onClick={() => setImage((image + 1) % images.length)}
               aria-label="Next product image"
@@ -73,19 +126,27 @@ export function ProductDetail({ product }: { product: Product }) {
         <div className="gallery-thumbnails">
           {images.map((photo, index) => (
             <button
+              type="button"
               key={photo.id}
               className={image === index ? "selected" : ""}
               aria-label={`Show image ${index + 1}`}
               aria-pressed={image === index}
               onClick={() => setImage(index)}
             >
-              <Image src={photo.url} alt={photo.alt} width={100} height={125} />
+              <Image
+                src={photo.url}
+                alt={photo.alt}
+                width={100}
+                height={125}
+                quality={80}
+                sizes="68px"
+              />
             </button>
           ))}
           <p>
             Good from every angle.
             <br />
-            <span>Original demo imagery.</span>
+            <span>Made to be lived in.</span>
           </p>
         </div>
       </div>
@@ -95,7 +156,7 @@ export function ProductDetail({ product }: { product: Product }) {
         <a href="#reviews" className="rating">
           <Star size={15} fill="currentColor" />
           {product.rating?.toFixed(1)}{" "}
-          <span>({product.reviewCount} demo reviews)</span>
+          <span>({product.reviewCount} reviews)</span>
         </a>
         <div className="pdp-price">
           <Price
@@ -128,9 +189,7 @@ export function ProductDetail({ product }: { product: Product }) {
               </button>
             ))}
           </div>
-          <small className="muted">
-            Colors are illustrative in this frontend demo.
-          </small>
+          <small className="muted">Colours may vary slightly by screen.</small>
         </fieldset>
         <div className="size-heading">
           <span>Select size {size && `— ${size}`}</span>
@@ -202,10 +261,28 @@ export function ProductDetail({ product }: { product: Product }) {
           <WishlistButton product={product} />
         </div>
         <p className="stock-feedback" role="status">
-          {feedback ||
-            (variant?.inStock
-              ? `${remaining} available to add in this size and color.`
-              : "Pick your color and size to make it yours.")}
+          {feedback ? (
+            <>
+              {feedback}{" "}
+              <button
+                type="button"
+                className="inline-feedback-action"
+                onClick={openCart}
+              >
+                View your bag
+              </button>
+            </>
+          ) : variant?.inStock && remaining > 0 ? (
+            remaining <= 5 ? (
+              `Only ${remaining} left in this size and color.`
+            ) : (
+              `${remaining} available to add in this size and color.`
+            )
+          ) : variant?.inStock ? (
+            "This variant is already at its stock limit in your bag."
+          ) : (
+            "Pick your color and size to make it yours."
+          )}
         </p>
         <div className="delivery-promises">
           <p>
@@ -214,7 +291,11 @@ export function ProductDetail({ product }: { product: Product }) {
           </p>
           <p>
             <RotateCcw size={19} />
-            Easy returns within 7 days · demo policy
+            Easy returns within 7 days
+          </p>
+          <p>
+            <ShieldCheck size={19} />
+            Secure checkout · your payment details stay private
           </p>
         </div>
         <div className="product-accordions">
@@ -224,7 +305,7 @@ export function ProductDetail({ product }: { product: Product }) {
             ["Care for your clothes", product.care],
             [
               "Shipping & returns",
-              "Standard delivery in 3–5 working days. Express in 1–2 working days. Unworn pieces may be returned within 7 days. These are preview policies; no real orders are fulfilled.",
+              "Standard delivery in 3–5 working days. Express delivery takes 1–2 working days. Unworn pieces may be returned within 7 days.",
             ],
           ].map(([title, copy]) => (
             <details key={title}>
@@ -241,6 +322,54 @@ export function ProductDetail({ product }: { product: Product }) {
         </Link>
       </div>
       <SizeGuide open={guide} onClose={() => setGuide(false)} />
+      <Dialog
+        open={zoomOpen}
+        onClose={() => setZoomOpen(false)}
+        title={`${product.name} image ${image + 1} of ${images.length}`}
+        portal
+        className="gallery-zoom-dialog"
+      >
+        <div className="gallery-zoom-content">
+          <div className="gallery-zoom-image">
+            <Image
+              src={currentImage.url}
+              alt={currentImage.alt}
+              fill
+              quality={95}
+              sizes="(max-width:767px) 92vw, 76vw"
+            />
+          </div>
+          {images.length > 1 && (
+            <div className="gallery-zoom-controls">
+              <button
+                type="button"
+                className="icon-button circle-outline"
+                aria-label="Previous product image"
+                onClick={() =>
+                  setImage(
+                    (current) => (current - 1 + images.length) % images.length,
+                  )
+                }
+              >
+                <ArrowLeft size={20} />
+              </button>
+              <span aria-live="polite">
+                {image + 1} / {images.length}
+              </span>
+              <button
+                type="button"
+                className="icon-button circle-outline"
+                aria-label="Next product image"
+                onClick={() =>
+                  setImage((current) => (current + 1) % images.length)
+                }
+              >
+                <ArrowRight size={20} />
+              </button>
+            </div>
+          )}
+        </div>
+      </Dialog>
     </div>
   );
 }

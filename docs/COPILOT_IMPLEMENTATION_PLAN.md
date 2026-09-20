@@ -1,5 +1,339 @@
 # Implementation plan
 
+## Admin product and variant media workflow — complete (2026-09-20)
+
+- [x] Make the Create variant action explicit in the new-product workspace.
+- [x] Reveal a dedicated image workspace after each color variant is created.
+- [x] Enforce one required and four maximum ordered images per variant, with
+      precise readiness feedback for missing media.
+
+## Admin per-size inventory — complete (2026-09-20)
+
+- [x] Replace the color builder's shared starting stock with an independent
+      stock input for every selected size.
+- [x] Keep each quantity on its generated color/size `ProductVariant` record
+      and preserve per-row editing in the variant matrix.
+- [x] Verify storefront stock resolution remains keyed to the selected
+      `variantId` and cover different size quantities in Admin E2E.
+
+## Complete Admin product merchandising controls — complete (2026-09-20)
+
+- [x] Add name, unique slug, category, detailed PDP copy, keywords, New state,
+      release timing and SEO controls with an inline search preview.
+- [x] Give every color an editable name/hex, dedicated product-card crop, live
+      card preview and independently ordered one-to-four-image gallery.
+- [x] Add image alt text, reorder, replacement and confirmed deletion controls.
+- [x] Add size creation plus editable size, SKU, regular/original price, stock
+      and variant deletion controls.
+- [x] Add publishing-readiness validation, draft preview and Scheduled status.
+- [x] Add product duplication and confirmed deletion with local data cleanup.
+- [x] Update storefront image resolution, sale/New/search/PDP/SEO behavior and
+      published/scheduled Admin catalog synchronization.
+- [x] Cover product creation/publishing plus duplicate/delete lifecycle in E2E
+      and run full project verification.
+
+## Admin product gallery and variant creation — complete (2026-09-20)
+
+- [x] Create blank Admin product drafts instead of cloning fixture products.
+- [x] Add sequential, ordered product-gallery crop slots with one-image
+      minimum, four-image maximum validation and visible variant media workspaces.
+- [x] Add named color creation with a synchronized native picker and visible hex
+      field, size selection, price, stock and SKU generation.
+- [x] Keep generated size variants editable and removable in the matrix.
+- [x] Bridge published browser Admin state into storefront listings, commerce,
+      product cards and a static preview detail route.
+- [x] Cover the full create → four uploads → variant → publish → storefront flow
+      in Playwright and run project verification.
+
+## Admin category image workspace parity — complete (2026-09-20)
+
+- [x] Replace the category upload-only wrapper with the shared product-style
+      `MediaCropper` workspace.
+- [x] Show the current category image and crop selection immediately on detail
+      routes, while retaining replacement and rendered-save behavior.
+- [x] Remove the unused upload-only component and CSS.
+- [x] Update Admin E2E coverage and rerun project verification.
+
+## Admin overlay crop selection — complete (2026-09-20)
+
+- [x] Replace image-under-frame dragging with a complete source-image view and
+      movable fixed-ratio crop rectangle.
+- [x] Dim excluded pixels, add pointer and keyboard movement, and retain a
+      ratio-safe crop-size control.
+- [x] Render saved crops through canvas into WebP images at every slot's target
+      pixel dimensions.
+- [x] Persist and preview the rendered result, and cover crop movement plus
+      output dimensions in Admin E2E.
+
+## Admin detail workspace refinement — complete (2026-09-20)
+
+- [x] Keep category and product save actions in panel flow so they do not
+      overlap editable fields.
+- [x] Recompose product detail into a full-width copy/status editor followed
+      by a desktop cropper/inventory split with a mobile one-column fallback.
+- [x] Keep category imagery upload-only until selection, then use the target
+      slot's cropper for the replacement image.
+- [x] Verify both requested detail routes in the running browser and rerun
+      format, lint, typecheck, unit, build and Playwright checks.
+
+## Admin image preview fidelity — complete (2026-09-20)
+
+- [x] Drive upload placeholders, crop viewports and saved previews from each
+      storefront image slot's target ratio and pixel dimensions.
+- [x] Keep fixture category media upload-only, then persist replacement media
+      as an upload asset after the crop is saved.
+- [x] Keep saved category previews visible with the saved crop and provide a
+      Replace image action that reopens the slot-aware cropper.
+- [x] Show saved-preview state in product and homepage cropper surfaces and
+      cover category upload-to-preview behavior in Admin E2E.
+
+## Admin visual system and interaction polish — complete (2026-09-20)
+
+- [x] Align Admin typography, page headers, navigation, buttons, inputs,
+      panels, cards, status badges, filters, pagination and save bars.
+- [x] Polish Overview, Categories, Products, Orders, Settings, Activity Log,
+      detail editors, login and fallback/loading surfaces with shared rules.
+- [x] Improve responsive behavior, keyboard-visible focus, reduced-motion
+      handling and cropper/upload control alignment.
+- [x] Remove the artificial route-entry delay while preserving hydration-safe
+      browser persistence.
+- [x] Correct dashboard order-status presentation and product category labels.
+- [x] Verify format, lint, typecheck, unit tests, production build and the full
+      16-test Playwright suite.
+
+## Section-aware storefront imagery — complete (2026-09-20)
+
+- [x] Add named media slots for each current storefront photo placement.
+- [x] Expose homepage image slots inside Admin Settings without restoring a
+      Homepage sidebar item or standalone Media Library.
+- [x] Show each slot's frontend crop ratio and target pixel-size guidance.
+- [x] Persist upload data and crop metadata in the browser demo snapshot and
+      keep fixture files unchanged.
+- [x] Verify upload/crop previews, responsive layout, accessibility, format,
+      lint, typecheck, tests, build and Admin E2E.
+
+## Admin list/detail refinement — complete (2026-09-20)
+
+- [x] Remove the Homepage Admin route/navigation and standalone Media Library
+      surface while keeping crop editing inside category/product workspaces.
+- [x] Add confirmed category deletion with browser activity logging.
+- [x] Split Products into a newest-first, 15-item paginated list and focused
+      `/admin/products/[id]` editor for copy, image crop and variant stock.
+- [x] Split Orders into a newest-first, 15-item paginated list and focused
+      `/admin/orders/[id]` fulfilment editor.
+- [x] Update the architecture, living requirements, handoff and Admin E2E
+      coverage for the new navigation and detail-first flow.
+
+## Styleco Admin frontend demo — complete (2026-09-20)
+
+The previous Storefront-only/no-Admin scope is superseded for this increment.
+The implementation remains one Next.js app under `apps/storefront`; no
+`apps/admin` app and no `admin.styleco.com` deployment are planned.
+
+- [x] Record the one-app `/admin` route-tree decision in the architecture,
+      living requirements and handoff.
+- [x] Move public routes into a route group without changing public URLs and
+      keep the root document layout separate from the Storefront shell.
+- [x] Add `/admin/login` and a centralized frontend-demo auth guard using the
+      exact temporary credentials `admin` / `admin`.
+- [x] Add the isolated Admin shell, responsive navigation, metadata, loading,
+      error and not-found states; keep Storefront providers out of Admin.
+- [x] Add browser-persisted mock Admin repositories/services for the initial
+      homepage, categories, products/variants, media slots, settings, orders
+      and activity demo data.
+- [x] Add the dashboard, initial category/product management, variant matrix,
+      cropper, orders, settings and activity-log screens. The initial
+      Homepage editor and standalone Media Library are superseded by the
+      list/detail refinement above.
+- [x] Add reusable slot-aware image cropper previews for category, product and
+      campaign/media artwork.
+- [x] Support draft/published/archived labels, mock preview, resettable demo
+      state, responsive layouts, keyboard access and noindex/no-follow Admin
+      metadata. Do not rewrite source fixture files.
+- [x] Verify public routes remain unchanged and Admin has no visible Storefront
+      link; run formatting, lint, typecheck, unit tests, build and Playwright.
+
+The completed implementation remains compatible with the GitHub Pages static
+showcase. Production Admin security and persistence are deferred to the same
+app deployed on server-capable Appwrite Sites with Appwrite Auth, TablesDB,
+Storage and Functions.
+
+## Storefront UX polish pass — complete (2026-09-19)
+
+- [x] Improve product-card hierarchy and image loading transitions.
+- [x] Add active navigation states and preserve mobile filter reachability.
+- [x] Add product-aware bag confirmation with an Undo action.
+- [x] Polish checkout progress, focus states, and empty-state actions.
+
+## Primary surface palette refinement — complete (2026-09-19)
+
+- [x] Restore the cursor to its original black-only styling.
+- [x] Replace near-black primary surfaces with deep forest sage.
+- [x] Give delivery and trust panels a soft sage-tinted surface.
+
+## Product card stock cue removal — complete (2026-09-19)
+
+- [x] Remove low-stock count messaging from every product card.
+- [x] Keep out-of-stock presentation and inventory enforcement unchanged.
+
+## Modal lifecycle motion — complete (2026-09-19)
+
+- [x] Animate centered modal entry and exit with a coordinated backdrop.
+- [x] Animate left and right drawer entry and exit from their originating edge.
+- [x] Give the bag drawer a distinct right-origin spring motion.
+- [x] Keep native dialog focus restoration and reduced-motion behavior intact.
+- [x] Add tactile bag-trigger feedback and verify modal lifecycle behavior.
+- [x] Close the bag immediately when navigating to the full cart route.
+- [x] Preserve the scrollbar gutter while dialogs lock page scrolling.
+
+## Search modal visual alignment — complete (2026-09-19)
+
+- [x] Apply the current near-pearl glass shell and rounded modal geometry.
+- [x] Restyle the search field as a focused pill control.
+- [x] Convert search results to compact inset product cards.
+- [x] Align suggestions, close control, icon accents, hover, and mobile states
+      with the current storefront system.
+- [x] Preserve existing search behavior and accessibility semantics.
+
+## Storefront continuity and confidence pass — complete (2026-09-19)
+
+- [x] Restore URL-synced filters and sorting on browser Back/Forward.
+- [x] Confirm existing browser persistence for cart and wishlist state.
+- [x] Add zoomable product imagery with accessible gallery navigation.
+- [x] Add recent-search storage, popular search suggestions, and combobox
+      semantics.
+- [x] Add checkout section progress and clearer delivery estimates.
+- [x] Show availability states without changing inventory contracts. The
+      low-stock count presentation was later removed by ADR-043.
+- [x] Add a mobile quick-navigation bar for the core shopping destinations.
+- [x] Tune image quality, priority, and thumbnail sizing for the demo catalog.
+- [x] Add a recoverable global error fallback.
+- [x] Add a clear control to recently viewed products.
+- [x] Verify the storefront through lint, typecheck, unit tests, build, and
+      browser checks.
+
+## Storefront discovery and feedback pass — complete (2026-09-19)
+
+- [x] Persist listing search, filters, and sorting in the URL.
+- [x] Add route/product-image loading skeletons.
+- [x] Add delivery, returns, and secure-checkout trust messaging to product
+      detail.
+- [x] Add related products to product detail and cart.
+- [x] Add guided search empty states with category and popular-term links.
+- [x] Add carousel keyboard guidance and visible position indicators.
+- [x] Add inline validation and clearer error summaries to checkout and demo
+      forms.
+- [x] Add client-only recently viewed products.
+- [x] Verify the storefront through lint, typecheck, unit tests, build, and
+      browser checks.
+
+## Storefront usability polish pass — complete (2026-09-19)
+
+- [x] Add scroll-aware depth to the sticky header.
+- [x] Quiet category pills and add a subtle best-sellers surface rhythm.
+- [x] Strengthen sale-price hierarchy and muted-text readability.
+- [x] Add a sticky mobile filter/sort toolbar.
+- [x] Improve empty-result copy and add contextual filter reset feedback.
+- [x] Add a shared animated add-to-bag confirmation toast.
+- [x] Verify the storefront through lint, typecheck, tests, build, and browser
+      checks.
+
+## Storefront visual refinement pass — complete (2026-09-19)
+
+- [x] Improve category-label contrast with a dark translucent backing.
+- [x] Add a translucent blurred sticky header.
+- [x] Strengthen active filter, selected swatch, input-focus, and mobile-image
+      surface states.
+- [x] Warm secondary buttons and add the shipping-strip terracotta accent.
+- [x] Keep blue-teal focus-only and limit terracotta to sale communication plus
+      the shipping accent.
+- [x] Update storefront documentation and verify the complete app checks.
+
+## Storefront color system refinement — complete (2026-09-19)
+
+- [x] Increase pearl canvas/card separation and add warm surface layers.
+- [x] Replace legacy neon orange/lime/neutral overrides with terracotta and
+      sage semantic states.
+- [x] Warm borders, image surfaces, shadows, dialogs, footer, and form states.
+- [x] Keep destructive, success, and focus colors distinct and accessible.
+
+## Storefront motion pass — complete (2026-09-19)
+
+- [x] Add cohesive page-entry and staggered card/panel reveals.
+- [x] Add tactile hover/focus feedback for navigation, cards, images, controls,
+      dialogs, and footer links.
+- [x] Add reduced-motion fallbacks that remove decorative motion.
+- [x] Verify motion changes through lint, typecheck, tests, and browser checks.
+
+## Quick add modal chrome — complete (2026-09-19)
+
+- [x] Remove the visible Quick Add product-title header and close icon.
+- [x] Preserve an accessible dialog title and outside-click dismissal.
+
+## Quick add polish — complete (2026-09-19)
+
+- [x] Render Quick Add at document level to preserve the listing scroll position.
+- [x] Add product imagery and a compact product summary to the modal.
+- [x] Reduce modal spacing and dimensions for desktop and mobile.
+
+## Homepage intro removal — complete (2026-09-19)
+
+- [x] Remove the visible homepage intro and CTA above the category collage.
+- [x] Restore a semantic screen-reader-only homepage heading.
+
+## Storefront UX refinement — complete (2026-09-19)
+
+- [x] Add a Quick add modal with explicit color and size selection.
+- [x] Keep add-to-bag feedback inline and make bag opening explicit.
+- [x] Keep the category collage as the first visible homepage section.
+- [x] Keep navigation sticky during long pages.
+- [x] Reduce mobile card density and expose active filter chips.
+- [x] Fix item-count grammar and humanize search-result category labels.
+- [x] Cover the quick-add and browse-preserving bag behavior in browser tests.
+
+## Pearl-white canvas and visible product cards — complete (2026-09-19)
+
+- [x] Set the storefront canvas to the warmer pearl-white `#F7F4EE` token.
+- [x] Use the opaque near-pearl `#FFFDF8` for product-card fills.
+- [x] Reduce the white card highlight so the surface contrast remains visible.
+
+## Reference product card layout — complete (2026-09-19)
+
+- [x] Use a wide rounded image panel inside the glass card with contain-fit product
+      imagery and the existing badges.
+- [x] Move the existing wishlist control into the metadata row beside the existing
+      category content.
+- [x] Keep the existing name, rating, swatches, price, stock, navigation and
+      responsive behavior while matching the reference hierarchy and spacing.
+- [x] Keep one neutral glass material shared by every ProductCard.
+- [x] Restore the taller product image panel, align swatches to the rating row,
+      and add the existing CommerceProvider-backed Add to cart action beside price.
+- [x] Fill the image pane without a visible white inset and shorten the Add to cart
+      control while preserving its price alignment.
+
+## Clear glass cards and black cursor — complete (2026-09-19)
+
+- [x] Remove grey tint from card shells and product image panes.
+- [x] Increase glass blur and edge reflections without blurring child content.
+- [x] Restore normal product-image blending while preserving the PDP gallery.
+- [x] Change the cursor dot, ring and expanded state to black.
+
+## Glassmorphic product cards — complete (2026-09-19)
+
+- [x] Wrap image and all metadata visually in one rounded glass card shell.
+- [x] Add translucent layers, backdrop blur, inner highlights and soft depth.
+- [x] Restyle image, wishlist and stock overlays to belong to the same material.
+- [x] Preserve card interactions and add browser assertions for the glass shell.
+
+## Reference cursor and featured-product treatment — complete (2026-09-19)
+
+- [x] Add the reference-inspired dot and trailing ring cursor for fine pointers.
+- [x] Expand the ring over interactive elements and preserve native touch input.
+- [x] Add category/rating hierarchy and pill badges to shared product cards.
+- [x] Give homepage product rows a 1216px, four-card desktop frame and responsive
+      three-card/tablet and horizontal/mobile behavior.
+- [x] Preserve wishlist, swatches, stock, product navigation and reduced motion.
+
 ## GitHub Pages demo deployment — complete (2026-09-18)
 
 - [x] Configure an Actions-only Next.js static export for the repository path.
@@ -93,8 +427,10 @@ demo assets; the reference photography is not included. Exact photographic fidel
 and unseen portions of the cropped reference remain unresolved without supplied
 assets/full designs. Do not claim pixel-identical completion or Design Freeze.
 
-This remains the local frontend demo increment. No backend, Admin, deployment,
-newsletter or external service integration is authorized.
+This remains the local frontend demo increment. No backend, Appwrite,
+production authentication, deployment migration, newsletter or external
+service integration is authorized. The Admin frontend-demo exception is tracked
+in the dated section at the top of this plan.
 
 ## Phase 0 — Foundation (complete, 2026-09-15)
 
@@ -140,7 +476,8 @@ or higher on the background. This validates token wiring, not the future homepag
 - [ ] AIDOS D5–D7 + Homepage Increment 1: Header, Hero and Best of the Week
       category carousel.
 
-This separate increment was superseded; no Admin or backend work is authorized.
+This separate increment was superseded; its Storefront-only Admin exclusion is
+historical. No Appwrite backend work is authorized by that historical record.
 
 ## Frontend Demo / Interactive Prototype — complete
 
@@ -253,3 +590,110 @@ and second-gallery-image expectations to match current UI and single-image-per-c
 fixtures. Fixed tee asset lookup to use the existing t-shirt filenames.
 Review artifacts: apps/storefront/test-results/home-1440.png and home-390.png.
 Human comparison and matching final photography remain pending; no Design Freeze.
+
+## Storefront-wide minimal surface pass — 2026-09-19
+
+- [x] Apply the shared clear glass and soft-neutral material to product detail,
+      cart, wishlist empty states, dialogs and the Shop drawer.
+- [x] Reuse rounded controls, compact spacing, neutral borders and readable
+      contrast across checkout, account, confirmation and listing controls.
+- [x] Make the Shop and Bag drawers fixed floating windows with equal viewport
+      gaps, four rounded corners and scrollable inner content without drag behavior.
+- [x] Hide the Bag drawer's scrollbar chrome while preserving native content
+      scrolling.
+- [x] Preserve route markup, commerce behavior, service boundaries and current
+      content while refining the visual system.
+- [x] Run formatting, lint, typecheck, unit tests, production build and the full
+      seven-test responsive browser suite.
+
+Verification: `pnpm format:check`, `pnpm lint`, `pnpm typecheck`, `pnpm test`,
+`pnpm build`, and `pnpm test:e2e --workers=1` pass. Live desktop verification
+shows 16px gaps and 28px corners for both drawer directions; the mobile rules use
+12px gaps and 24px corners.
+
+## Storefront audit and dropdown polish — complete (2026-09-19)
+
+- [x] Keep selected variant color imagery consistent in cart, checkout and order
+      confirmation.
+- [x] Add keyboard-complete search suggestion semantics and active option state.
+- [x] Keep mobile navigation from obscuring checkout and confirmation content;
+      add a mobile checkout-step scroll affordance.
+- [x] Add accessible account tab state and enrich public/private route metadata.
+- [x] Mount Quick Add only while active to avoid hidden modal overhead.
+- [x] Replace generic social placeholder links with coming-soon labels.
+- [x] Restyle native selects and FAQ/product disclosures with pearl/sage states,
+      hover/focus feedback, opening motion, and reduced-motion fallbacks.
+- [x] Run the final lint, typecheck, unit, build and E2E verification for this
+      increment.
+
+The complete homepage curated product rails remain unchanged because the living
+requirements explicitly require the complete sale, top-seller and latest orders.
+Verification: lint, typecheck, 13 unit tests, production build and all 9 Playwright
+tests pass. The final browser suite covers desktop/mobile shopping journeys,
+touch/reduced-motion interaction, keyboard search selection, route health and
+requested responsive breakpoints.
+
+## Collection dropdown and filter toolbar refinement — complete (2026-09-20)
+
+- [x] Remove the route-derived Shop active state from the desktop and mobile
+      navigation triggers.
+- [x] Replace collection native selects with animated, keyboard-accessible styled
+      dropdowns with visible chevrons and reduced-motion fallbacks.
+- [x] Keep active filter chips beside the result count without expanding the
+      mobile or desktop toolbar into an additional row.
+- [x] Run lint, typecheck, unit tests, production build and the full E2E suite.
+
+Verification: lint, typecheck, 13 unit tests, production build and all 9 Playwright
+tests pass. Live browser checks cover the animated Sort by menu, compact mobile
+filter state and neutral Shop trigger.
+
+## Product detail control finish — complete (2026-09-20)
+
+- [x] Remove the rectangular hover treatment and vertical hover shift from
+      quantity minus/plus buttons.
+- [x] Replace the black selected gallery thumbnail border with the sage/pearl
+      treatment used by the rest of the storefront.
+- [x] Run lint, typecheck, unit tests, production build and browser verification.
+
+Verification: lint, typecheck, 13 unit tests, production build and the full
+9-test Playwright suite pass.
+
+## Storefront visual QA remediation — complete (2026-09-20)
+
+- [x] Remove mobile dock overlap from collection/search cards and dense content,
+      form, cart, account and information routes while preserving homepage quick
+      navigation.
+- [x] Make mobile Quick add, wishlist, swatch, filter, sort and search controls
+      readable and touch-safe; preserve compact desktop card layout.
+- [x] Improve small-text contrast and type scale, and use opaque dropdown menus.
+- [x] Correct shared rating, carousel and styled-select ARIA semantics.
+- [x] Align Next image quality configuration with every existing image quality
+      value and update the touch-target E2E expectation.
+- [x] Run lint, typecheck, unit tests, production build, axe checks and all
+      Playwright journeys/responsive route checks.
+
+Verification: lint, typecheck, 13 unit tests, production build, zero axe
+violations on category/PDP/contact/checkout, and all 9 Playwright tests pass.
+
+## Form focus treatment refinement — complete (2026-09-20)
+
+- [x] Replace thick green focus halos on shared input, textarea, select and
+      combobox controls with slim neutral/keyboard-visible focus states.
+- [x] Cover search, coupon, collection-search, checkbox and radio controls.
+- [x] Verify contact, search and collection controls in the local browser.
+
+## Customer-facing copy polish — complete (2026-09-20)
+
+- [x] Remove demo, preview, prototype, simulated-payment and placeholder social
+      language from rendered storefront copy.
+- [x] Rewrite product, account, information, policy, checkout and order
+      confirmation copy for a finished clothing retail experience.
+- [x] Update metadata, validation messages and affected browser assertions.
+- [x] Run the final lint, typecheck, unit, build and browser verification for
+      this increment.
+
+Verification: lint, typecheck, 13 unit tests, production build, all 9 Playwright
+tests, and live local route checks pass. Prettier still reports existing
+workspace-wide formatting warnings in files outside this copy increment.
+This increment supersedes the earlier plan item that used coming-soon social
+labels.

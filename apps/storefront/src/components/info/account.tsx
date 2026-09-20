@@ -20,7 +20,10 @@ export function Account() {
       <nav aria-label="Account sections">
         {["Overview", "Orders", "Addresses"].map((item) => (
           <button
+            type="button"
             className={tab === item ? "selected" : ""}
+            aria-pressed={tab === item}
+            aria-controls="account-panel"
             onClick={() => setTab(item)}
             key={item}
           >
@@ -32,8 +35,8 @@ export function Account() {
           Wishlist ({state.wishlist.length})<ArrowUpRight size={17} />
         </Link>
       </nav>
-      <section className="account-panel">
-        <p className="text-eyebrow">DEMO ACCOUNT · NO SIGN-IN REQUIRED</p>
+      <section className="account-panel" id="account-panel" aria-live="polite">
+        <p className="text-eyebrow">YOUR STYLECO ACCOUNT</p>
         <h2>
           {tab === "Overview"
             ? "Hey, good taste."
@@ -44,35 +47,32 @@ export function Account() {
         {tab === "Overview" ? (
           <>
             <p>
-              This is your Styleco account preview. Profile details below are
-              illustrative.
+              Keep your favourite pieces, orders and delivery details together
+              in one place.
             </p>
             <div className="profile-preview">
               <span>Alex Rahman</span>
               <span>alex@example.com</span>
             </div>
             <Link href="/login" className="text-cta">
-              Explore the sign-in screen <ArrowUpRight size={18} />
+              Sign in to your account <ArrowUpRight size={18} />
             </Link>
           </>
         ) : tab === "Orders" ? (
           order ? (
             <div>
-              <p>Latest demo order: {order.id}</p>
+              <p>Latest order: {order.id}</p>
               <p>Total: {money(order.total)}</p>
               <Link href="/order-confirmation" className="underlined">
                 View confirmation
               </Link>
             </div>
           ) : (
-            <p>
-              Your demo orders will appear here after checkout. No real order
-              history is connected.
-            </p>
+            <p>Your orders will appear here after checkout.</p>
           )
         ) : (
           <p>
-            Example address
+            Saved address
             <br />
             Alex Rahman
             <br />
@@ -81,8 +81,8 @@ export function Account() {
             Dhaka 1209
             <br />
             <small>
-              Illustrative profile only. Shipping entered at checkout stays with
-              that session’s confirmation.
+              Shipping details entered at checkout stay with your order
+              confirmation.
             </small>
           </p>
         )}

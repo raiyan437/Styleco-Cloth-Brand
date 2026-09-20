@@ -4,17 +4,24 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LockKeyhole, ArrowUpRight, Check } from "lucide-react";
+import { LockKeyhole, ArrowUpRight, Check, CalendarDays } from "lucide-react";
 import { useCommerce } from "../commerce-provider";
 import { useShopping, updateShopping } from "@/services/shopping-store";
 import { normalizeCart, cartTotals } from "@/services/mock-commerce";
+import { imageForVariant, money } from "@/services/catalog-query";
 import {
   checkoutSchema,
   type CheckoutValues,
 } from "@/services/checkout-schema";
 import { orderStorage } from "@/infrastructure/browser/shopping-storage";
-import { money } from "@/services/catalog-query";
 import { EmptyState } from "../ui/shared";
+
+const checkoutSteps = [
+  { id: "checkout-details", label: "Your details" },
+  { id: "checkout-address", label: "Delivery address" },
+  { id: "checkout-delivery", label: "Delivery" },
+  { id: "checkout-payment", label: "Payment" },
+];
 
 export function Checkout() {
   const { products } = useCommerce();
@@ -42,7 +49,7 @@ export function Checkout() {
       values.cardNumber?.replaceAll(" ", "") === "4000000000000002"
     ) {
       setDeclined(
-        "Demo card declined. Try 4242 4242 4242 4242 or choose Cash on Delivery.",
+        "Your card was declined. Please try another card or choose Cash on Delivery.",
       );
       return;
     }
@@ -66,12 +73,12 @@ export function Checkout() {
   }
   if (!ready) return <p>Preparing checkout…</p>;
   if (placed)
-    return <p role="status">Your demo order is ready. Opening confirmation…</p>;
+    return <p role="status">Your order is ready. Opening confirmation…</p>;
   if (!cart.length)
     return (
       <EmptyState
         title="First, find a favorite."
-        description="Add a piece to your bag before trying demo checkout."
+        description="Add a piece to your bag before checking out."
       />
     );
   const field = (
@@ -119,14 +126,34 @@ export function Checkout() {
       noValidate
     >
       <div className="checkout-fields">
-        <div className="demo-notice">
+        <nav className="checkout-progress" aria-label="Checkout steps">
+          <span className="checkout-progress-hint" aria-hidden="true">
+            Swipe to see all steps ↔
+          </span>
+          <ol>
+            {checkoutSteps.map((step, index) => (
+              <li key={step.id}>
+                <a href={`#${step.id}`}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  {step.label}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+        {Object.keys(errors).length > 0 && (
+          <p className="form-error-summary" role="alert">
+            Check the highlighted fields before continuing.
+          </p>
+        )}
+        <div className="checkout-notice">
           <LockKeyhole size={18} />
           <span>
-            Demo checkout. No real payment, delivery, or transaction will occur.
-            Use example details.
+            Your details are secure and used only to process your order. We’ll
+            confirm your delivery details after checkout.
           </span>
         </div>
-        <section className="checkout-section">
+        <section className="checkout-section" id="checkout-details">
           <h2>
             <span>01</span> Your details
           </h2>
@@ -135,7 +162,7 @@ export function Checkout() {
             {field("phone", "Phone number", "01712345678", "tel")}
           </div>
         </section>
-        <section className="checkout-section">
+        <section className="checkout-section" id="checkout-address">
           <h2>
             <span>02</span> Where’s it going?
           </h2>
@@ -146,7 +173,7 @@ export function Checkout() {
             {field("postalCode", "Postal code", "1209")}
           </div>
         </section>
-        <section className="checkout-section">
+        <section className="checkout-section" id="checkout-delivery">
           <h2>
             <span>03</span> Delivery, your way
           </h2>
@@ -166,8 +193,18 @@ export function Checkout() {
               <b>{money(15000)}</b>
             </label>
           </div>
+          <p className="delivery-estimate" role="status">
+            <CalendarDays size={18} />
+            <span>
+              Estimated arrival:{" "}
+              <strong>
+                {delivery === "express" ? "1–2" : "3–5"} working days
+              </strong>
+              <small>We’ll confirm the delivery details with your order.</small>
+            </span>
+          </p>
         </section>
-        <section className="checkout-section">
+        <section className="checkout-section" id="checkout-payment">
           <h2>
             <span>04</span> The final detail
           </h2>
@@ -180,7 +217,7 @@ export function Checkout() {
               />
               <span>
                 Cash on Delivery
-                <small>Demo order only. Nothing is collected.</small>
+                <small>Pay when your order arrives.</small>
               </span>
               {payment === "cod" && <Check size={20} />}
             </label>
@@ -191,27 +228,23 @@ export function Checkout() {
                 {...register("payment", { onChange: () => setDeclined("") })}
               />
               <span>
-                Demo Card<small>Test payment — no real transaction.</small>
+                Card payment<small>Secure payment at checkout.</small>
               </span>
               {payment === "card" && <Check size={20} />}
             </label>
           </div>
           {payment === "card" && (
             <div className="test-card">
-              <p>
-                Use <strong>4242 4242 4242 4242</strong> for success, or{" "}
-                <strong>4000 0000 0000 0002</strong> for a decline. Never enter
-                real card information.
-              </p>
+              <p>Enter your card number to complete payment.</p>
               <label className="field-label">
-                Demo test card number
+                Card number
                 <input
                   {...register("cardNumber", {
                     onChange: () => setDeclined(""),
                   })}
                   autoComplete="off"
                   inputMode="numeric"
-                  placeholder="4242 4242 4242 4242"
+                  placeholder="1234 5678 9012 3456"
                   aria-invalid={!!errors.cardNumber}
                   aria-describedby={
                     errors.cardNumber ? "card-error" : undefined
@@ -242,13 +275,16 @@ export function Checkout() {
           {cart.map((item) => {
             const p = products.find((p) => p.id === item.productId)!;
             const v = p.variants.find((v) => v.id === item.variantId)!;
+            const image = imageForVariant(p, v);
             return (
               <div key={item.variantId}>
                 <Image
-                  src={p.images[0]!.url}
-                  alt={p.name}
+                  src={image!.url}
+                  alt={image!.alt}
                   width={72}
                   height={90}
+                  quality={80}
+                  sizes="72px"
                 />
                 <span>
                   {p.name}
@@ -282,12 +318,12 @@ export function Checkout() {
           </p>
         </div>
         <button className="button full-width" disabled={isSubmitting || placed}>
-          Place demo order
+          Place order
           <ArrowUpRight size={19} />
         </button>
         <p className="summary-note">
-          This is a frontend demonstration. No payment information is saved.
-          Your confirmation lasts for this browser session.
+          Your order details are kept private and used only to fulfil your
+          order. You’ll receive confirmation after checkout.
         </p>
       </aside>
     </form>

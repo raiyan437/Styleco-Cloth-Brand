@@ -1,10 +1,9 @@
-# Styleco demo imagery
+# Styleco image credits
 
-Original AI-generated demo images, created with the built-in image generation tool
-for this prototype. No Dribbble assets were copied. Photographs are illustrative;
-they are not evidence of real inventory or reviews. Category imagery may include
-people; product-card imagery is intentionally product-only, with an isolated
-garment on a light studio background like a catalog flat lay.
+Original AI-generated editorial images, created with the built-in image generation
+tool for the Styleco storefront. No Dribbble assets were copied. Category imagery
+may include people; product-card imagery is intentionally product-only, with an
+isolated garment on a light studio background like a catalog flat lay.
 
 The current category panel refresh is stored folder-wise under
 `public/images/categories/{shirt,katua,t-shirt,pant,sleepwear}/category.webp`.
@@ -14,15 +13,11 @@ reference. They contain no text, logos or watermarks.
 
 The `public/images/products` folder contains 15 optimized WebP assets plus
 15 generated detail crops: one pair for each current category/color combination
-(three colors per category). The five mock products in a category share that
+(three colors per category). The five catalog products in a category share that
 category/color pair, while every product still exposes its own three color
 variants and `colorImages` mapping. This keeps the local fixture small while
 exercising the same swatch and gallery contract that future SKU-specific Appwrite
 Storage images will use.
-
-The legacy `*-color-1` and `*-color-2` files are local Sharp derivatives of the
-five category photographs and remain available for campaign/category surfaces.
-They are not used for product cards and are not production SKU photography.
 
 All final WebP files are local under `public/images`. No external runtime image host.
 
@@ -48,5 +43,4 @@ All final WebP files are local under `public/images`. No external runtime image 
   sources.
 
 All prompts requested realistic fashion photography with no text, logos or watermark.
-`scripts/prepare-demo-assets.mjs` performs the optional one-time local import and
-compression. Generated source PNGs are not required to run or build the storefront.
+The source PNGs are not required to run or build the storefront.

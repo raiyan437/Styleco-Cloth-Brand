@@ -64,7 +64,7 @@ test("wishlist and bag counts update in the topbar", async ({ page }) => {
     .click();
   await expect(page.locator(".wishlist-count")).toHaveText("1");
   await expect(
-    page.getByRole("link", { name: "Wishlist, 1 saved items" }),
+    page.getByRole("link", { name: "Wishlist, 1 saved item" }),
   ).toBeVisible();
 
   await page.goto("/products/relaxed-oxford-shirt");
@@ -73,6 +73,63 @@ test("wishlist and bag counts update in the topbar", async ({ page }) => {
   await expect(page.locator(".bag-count")).toHaveText("1");
   await expect(page.locator(".bag-button")).toHaveAttribute(
     "aria-label",
-    "Bag, 1 items",
+    "Bag, 1 item",
   );
+});
+
+test("quick add requires options and keeps browsing context", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const card = page.locator(".latest-products-carousel .product-card").first();
+  await card.scrollIntoViewIfNeeded();
+  const scrollBefore = await page.evaluate(() => window.scrollY);
+  await card
+    .getByRole("button", { name: "Quick add Relaxed Oxford Shirt" })
+    .click();
+  await expect
+    .poll(() => page.evaluate(() => window.scrollY))
+    .toBe(scrollBefore);
+  const quickAdd = page.getByRole("dialog", {
+    name: "Quick add Relaxed Oxford Shirt",
+  });
+  await expect(quickAdd).toBeVisible();
+  await expect(quickAdd.locator(".dialog-heading")).toHaveCount(0);
+  await expect(
+    quickAdd.getByRole("button", {
+      name: "Close Quick add Relaxed Oxford Shirt",
+    }),
+  ).toHaveCount(0);
+  await expect(quickAdd.locator(".quick-add-product-image img")).toBeVisible();
+  await quickAdd.getByRole("button", { name: "Select White" }).click();
+  await expect(
+    quickAdd.locator(".quick-add-product-image img"),
+  ).toHaveAttribute("alt", /white/i);
+  await expect(
+    quickAdd.getByRole("button", { name: "Add to bag" }),
+  ).toBeDisabled();
+  await quickAdd.getByRole("button", { name: "Size S" }).click();
+  await quickAdd.getByRole("button", { name: "Add to bag" }).click();
+  await expect(quickAdd.getByRole("status")).toContainText(
+    "Added to your bag.",
+  );
+  await expect(page.getByRole("dialog", { name: "Your bag" })).toHaveCount(0);
+  await quickAdd.getByRole("button", { name: "View your bag" }).click();
+  const bag = page.getByRole("dialog", { name: "Your bag" });
+  await expect(bag).toBeVisible();
+  await expect(bag.locator("img")).toHaveAttribute("alt", /white/i);
+});
+
+test("search suggestions support keyboard selection", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Search", exact: true }).click();
+  const input = page.getByRole("combobox", { name: "Search products" });
+  await input.fill("katua");
+  await input.press("ArrowDown");
+  await expect(input).toHaveAttribute(
+    "aria-activedescendant",
+    "search-option-0",
+  );
+  await input.press("Enter");
+  await expect(page).toHaveURL(/\/products\//);
 });

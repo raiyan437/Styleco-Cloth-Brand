@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, X } from "lucide-react";
 import { money } from "@/services/catalog-query";
 
 export function Price({
@@ -18,16 +18,36 @@ export function Price({
     </span>
   );
 }
+
+export function ProductCardSkeleton() {
+  return (
+    <article className="product-card product-card-skeleton" aria-hidden="true">
+      <div className="product-image-wrap skeleton-block" />
+      <div className="product-info">
+        <div className="skeleton-line skeleton-category" />
+        <div className="skeleton-line skeleton-title" />
+        <div className="skeleton-line skeleton-meta" />
+        <div className="skeleton-purchase-row">
+          <div className="skeleton-line skeleton-price" />
+          <div className="skeleton-button" />
+        </div>
+      </div>
+    </article>
+  );
+}
+
 export function EmptyState({
   title,
   description,
   href = "/new-arrivals",
   label = "Explore the collection",
+  secondaryAction,
 }: {
   title: string;
   description: string;
   href?: string;
   label?: string;
+  secondaryAction?: { label: string; onClick: () => void };
 }) {
   return (
     <div className="empty-state">
@@ -38,6 +58,16 @@ export function EmptyState({
         {label}
         <ArrowUpRight size={18} />
       </Link>
+      {secondaryAction && (
+        <button
+          type="button"
+          className="button button-light empty-state-secondary-action"
+          onClick={secondaryAction.onClick}
+        >
+          {secondaryAction.label}
+          <X size={17} />
+        </button>
+      )}
     </div>
   );
 }

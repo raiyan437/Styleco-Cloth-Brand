@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Check, ArrowUpRight } from "lucide-react";
 import { orderStorage } from "@/infrastructure/browser/shopping-storage";
 import { useCommerce } from "../commerce-provider";
-import { money } from "@/services/catalog-query";
+import { imageForVariant, money } from "@/services/catalog-query";
 import { EmptyState } from "../ui/shared";
 const subscribe = () => () => {};
 export function OrderConfirmation() {
@@ -21,7 +21,7 @@ export function OrderConfirmation() {
     return (
       <EmptyState
         title="Your next good day starts here."
-        description="Place a demo order to preview your confirmation."
+        description="Place an order to see your confirmation here."
       />
     );
   return (
@@ -29,15 +29,15 @@ export function OrderConfirmation() {
       <div className="confirmation-icon">
         <Check size={32} />
       </div>
-      <p className="text-eyebrow">DEMO ORDER {order.id}</p>
+      <p className="text-eyebrow">ORDER {order.id}</p>
       <h1>
         Good choices.
         <br />
         Great taste.
       </h1>
       <p>
-        Your demo order is confirmed. No payment was taken and no delivery will
-        be made.
+        Your order is confirmed. We’ll keep you updated as it makes its way to
+        you.
       </p>
       <div className="confirmation-details">
         <div>
@@ -49,21 +49,19 @@ export function OrderConfirmation() {
             <br />
             {order.address.city} {order.address.postalCode}
           </p>
-          <p>
-            {order.payment === "cod" ? "Cash on Delivery" : "Demo Card"} ·
-            Simulated
-          </p>
+          <p>{order.payment === "cod" ? "Cash on Delivery" : "Card payment"}</p>
         </div>
         <div>
           <h2>Your edit</h2>
           {order.items.map((item) => {
             const p = products.find((p) => p.id === item.productId);
             const v = p?.variants.find((v) => v.id === item.variantId);
+            const image = p && v ? imageForVariant(p, v) : undefined;
             return p && v ? (
               <div className="confirmation-item" key={item.variantId}>
                 <Image
-                  src={p.images[0]!.url}
-                  alt={p.name}
+                  src={image!.url}
+                  alt={image!.alt}
                   width={50}
                   height={64}
                 />

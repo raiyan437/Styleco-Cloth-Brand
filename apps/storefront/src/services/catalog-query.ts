@@ -1,8 +1,21 @@
-import type { Product, ProductVariant } from "../domain/catalog";
+import type { Product, ProductImage, ProductVariant } from "../domain/catalog";
 
 export function displayVariant(product: Product): ProductVariant | undefined {
   return (
     product.variants.find((variant) => variant.inStock) ?? product.variants[0]
+  );
+}
+
+export function imageForVariant(
+  product: Product,
+  variant?: ProductVariant,
+): ProductImage | undefined {
+  const color = variant?.color?.name;
+  return (
+    (color ? product.colorCardImages?.[color] : undefined) ??
+    product.cardImage ??
+    (color ? product.colorImages?.[color]?.[0] : undefined) ??
+    product.images[0]
   );
 }
 export function isSale(product: Product) {

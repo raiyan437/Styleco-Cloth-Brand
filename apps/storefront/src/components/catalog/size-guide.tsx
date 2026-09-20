@@ -3,8 +3,8 @@ export function SizeTable() {
   return (
     <>
       <p className="muted">
-        Find your comfortable fit. Body measurements in inches; demo sizing is
-        indicative.
+        Find your comfortable fit. Body measurements are in inches and are a
+        helpful starting point.
       </p>
       <div className="table-scroll">
         <table className="size-table">

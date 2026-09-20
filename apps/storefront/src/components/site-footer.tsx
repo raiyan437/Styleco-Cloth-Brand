@@ -42,22 +42,11 @@ export async function SiteFooter() {
             </div>
             <div>
               <h3>LET’S CONNECT</h3>
-              <a
-                href="https://www.instagram.com/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Instagram ↗
-              </a>
-              <a
-                href="https://www.facebook.com/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Facebook ↗
-              </a>
+              <span className="footer-social-link">Instagram</span>
+              <span className="footer-social-link">Facebook</span>
               <p className="footer-note">
-                Social destinations are placeholders for the demo.
+                Follow Styleco for new arrivals, styling notes and everyday
+                inspiration.
               </p>
             </div>
           </div>
@@ -68,7 +57,7 @@ export async function SiteFooter() {
         <div className="footer-bottom">
           <span>© 2026 Styleco. Every day, your way.</span>
           <span>BDT ৳ · Bangladesh</span>
-          <span>LOCAL STOREFRONT DEMO</span>
+          <span>EVERYDAY CLOTHING</span>
         </div>
       </div>
     </footer>

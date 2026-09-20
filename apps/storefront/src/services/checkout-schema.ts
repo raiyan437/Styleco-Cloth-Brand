@@ -26,7 +26,7 @@ export const checkoutSchema = z
       ctx.addIssue({
         code: "custom",
         path: ["cardNumber"],
-        message: "Use one of the displayed demo test numbers only.",
+        message: "Enter a valid card number.",
       });
     }
   });

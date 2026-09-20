@@ -85,9 +85,12 @@ for (const viewport of [
     const firstCard = page
       .locator(".latest-products-carousel .product-card")
       .first();
+    await expect(firstCard).toHaveCSS("border-top-left-radius", "28px");
+    await expect(firstCard).toHaveCSS("backdrop-filter", /blur\(30px\)/);
+    await expect(firstCard.locator(".product-card-add-to-cart")).toBeVisible();
     expect(
       (await firstCard.locator(".wishlist-button").boundingBox())!.width,
-    ).toBeLessThan(44);
+    ).toBeGreaterThanOrEqual(44);
     const firstImage = firstCard.locator("img.product-image");
     const initialImage = await firstImage.getAttribute("src");
     if (viewport.width > 768) {
@@ -163,7 +166,8 @@ for (const viewport of [
     await filter.getByRole("button", { name: "Clear all filters" }).click();
     if (viewport.width < 768)
       await page.getByRole("button", { name: "Show 5 pieces" }).click();
-    await page.getByLabel("Sort by").selectOption("price-high");
+    await page.getByRole("combobox", { name: "Sort by" }).click();
+    await page.getByRole("option", { name: "Price: high to low" }).click();
     await expect(
       page.locator(".product-grid .product-name").first(),
     ).toHaveText("Studio Overshirt");
@@ -229,12 +233,15 @@ for (const viewport of [
       .click();
     await capture(page, `test-results/product-${viewport.width}.png`);
     await page.getByRole("button", { name: "Add to Bag", exact: true }).click();
-    await expect(page.getByRole("dialog", { name: "Your bag" })).toBeVisible();
+    await expect(page.getByRole("status")).toContainText("Added to your bag.");
+    await expect(page.getByRole("dialog", { name: "Your bag" })).toHaveCount(0);
     await expect(page.locator(".bag-count")).toHaveText("1");
     await expect(page.locator(".bag-button")).toHaveAttribute(
       "aria-label",
-      "Bag, 1 items",
+      "Bag, 1 item",
     );
+    await page.getByRole("button", { name: "Bag, 1 item" }).click();
+    await expect(page.getByRole("dialog", { name: "Your bag" })).toBeVisible();
     await page.getByRole("link", { name: "View your bag" }).click();
     await expect(page).toHaveURL(/\/cart/);
     await page
@@ -260,7 +267,7 @@ for (const viewport of [
     ).toBeVisible();
     await capture(page, `test-results/cart-${viewport.width}.png`);
     await page.getByRole("link", { name: "Continue to checkout" }).click();
-    await page.getByRole("button", { name: "Place demo order" }).click();
+    await page.getByRole("button", { name: "Place order" }).click();
     await expect(page.getByText("Enter a valid email address.")).toBeVisible();
     await page
       .getByLabel("Email address", { exact: true })
@@ -272,13 +279,13 @@ for (const viewport of [
       .fill("House 12, Road 5, Dhanmondi");
     await page.getByLabel("City", { exact: true }).fill("Dhaka");
     await page.getByLabel("Postal code", { exact: true }).fill("1209");
-    await page.getByRole("radio", { name: /Demo Card/ }).check();
-    await page.getByLabel("Demo test card number").fill("4000 0000 0000 0002");
-    await page.getByRole("button", { name: "Place demo order" }).click();
+    await page.getByRole("radio", { name: /Card payment/ }).check();
+    await page.getByLabel("Card number").fill("4000 0000 0000 0002");
+    await page.getByRole("button", { name: "Place order" }).click();
     await expect(
-      page.getByRole("alert").filter({ hasText: "Demo card declined" }),
+      page.getByRole("alert").filter({ hasText: "Your card was declined" }),
     ).toBeVisible();
-    await page.getByLabel("Demo test card number").fill("4242 4242 4242 4242");
+    await page.getByLabel("Card number").fill("4242 4242 4242 4242");
     if (viewport.width < 768)
       await page.getByRole("radio", { name: /Cash on Delivery/ }).check();
     await capture(page, `test-results/checkout-${viewport.width}.png`);
@@ -286,7 +293,7 @@ for (const viewport of [
       "scrollWidth",
       viewport.width,
     );
-    await page.getByRole("button", { name: "Place demo order" }).click();
+    await page.getByRole("button", { name: "Place order" }).click();
     await expect(page).toHaveURL(/\/order-confirmation/);
     await expect(
       page.getByRole("heading", { name: "Good choices. Great taste." }),
@@ -308,10 +315,10 @@ for (const viewport of [
       .click();
     await expect(page.getByText("Keep the good ones close.")).toBeVisible();
     await page.getByRole("button", { name: "Search", exact: true }).click();
-    await page.getByRole("textbox", { name: "Search products" }).fill("katua");
+    await page.getByRole("combobox", { name: "Search products" }).fill("katua");
     await expect(page.locator(".search-results>a")).toHaveCount(4);
     await page
-      .getByRole("textbox", { name: "Search products" })
+      .getByRole("combobox", { name: "Search products" })
       .fill("no-such-style");
     await expect(
       page.getByText("No matches just yet.", { exact: false }),
@@ -330,7 +337,7 @@ for (const viewport of [
 }
 
 test("all routes and requested breakpoints", async ({ page }) => {
-  test.setTimeout(180000);
+  test.setTimeout(300000);
   const routes = [
     "/",
     "/category/shirt",
